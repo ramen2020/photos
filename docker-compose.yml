@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  # Project_directory
+  web:
+    build: .
+    volumes:
+      - ./web:/var/www/html/photos
+    ports:
+      - 8081:8081
+      - 3000:3000
+
+  # DB
+  mysql:
+    build: ./mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: photos
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:
