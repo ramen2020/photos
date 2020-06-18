@@ -7,7 +7,7 @@ RUN apt-get update \
   &&  curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get install -y nodejs \
   && : 'Install PHP Extensions' \
-  && docker-php-ext-install -j$(nproc) pdo_pgsql \
+  && docker-php-ext-install pdo_mysql \
   && : 'Install Composer' \
   && chmod 755 /install-composer.sh \
   && /install-composer.sh \
