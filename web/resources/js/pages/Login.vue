@@ -64,13 +64,20 @@ export default {
     async register () {
       // authストアのresigterアクションを呼び出す。await非同期なアクションを完了まってから始まる
       await this.$store.dispatch('auth/register', this.registerForm)
-      // トップページに移動する
       this.$router.push('/')
     },
     async login () {
       await this.$store.dispatch('auth/login', this.loginForm)
-      this.$router.push('/')
+
+      if (this.apiStatus) {
+        this.$router.push('/')
+      }
     }
-  }
+  },
+  computed: {
+    apiStatus () {
+      return this.$store.state.auth.apiStatus
+    }
+  },
 }
 </script>

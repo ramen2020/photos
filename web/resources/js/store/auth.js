@@ -1,11 +1,14 @@
+import { OK } from '../util'
+
 // データの管理
 const state = {
-  user: null
+  user: null,
+  apiStatus: null
 }
 
 // stateから算出する値
 const getters = {
-  check: state => !! state.user, //確実に真偽値を返すために、二重否定
+  check: state => !!state.user, //確実に真偽値を返すために、二重否定
   username: state => state.user ? state.user.name : ''
 }
 
@@ -13,6 +16,9 @@ const getters = {
 const mutations = {
   setUser(state, user) {
     state.user = user
+  },
+  setApiStatus(state, status) {
+    state.apiStatus = status
   }
 }
 
@@ -24,14 +30,24 @@ const actions = {
     context.commit('setUser', response.data)
   },
   async login(context, data) {
+    context.commit('setApiStatus', null)
     const response = await axios.post('/api/login', data)
-    context.commit('setUser', response.data)
+      .catch(err => err.response || err)
+
+    if (response.status === OK) {
+      context.commit('setApiStatus', true)
+      context.commit('setUser', response.data)
+      return false
+    }
+
+    context.commit('setApiStatus', false)
+    context.commit('error/setCode', response.status, { root: true })
   },
   async logout(context) {
     await axios.post('/api/logout')
     context.commit('setUser', null)
   },
-  async currentUser (context) {
+  async currentUser(context) {
     const response = await axios.get('/api/user')
     const user = response.data || null //論理演算子
     context.commit('setUser', user)
