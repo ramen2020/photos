@@ -15,6 +15,14 @@
     <!-- ログインフォーム -->
     <div class="panel" v-show="tab === 1">
       <form class="form" @submit.prevent="login">
+        <div v-if="loginErrors" class="errors">
+          <ul v-if="loginErrors.email">
+            <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="loginErrors.password">
+            <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <label for="login-email">Email</label>
         <input type="text" class="form__item" id="login-email" v-model="loginForm.email">
         <label for="login-password">Password</label>
@@ -72,12 +80,22 @@ export default {
       if (this.apiStatus) {
         this.$router.push('/')
       }
+    },
+    // バリデーションメッセージが他のリンクへ遷移しても残るので、残らないようにするため
+    clearError () {
+      this.$store.commit('auth/setLoginErrorMessages', null)
     }
   },
   computed: {
     apiStatus () {
       return this.$store.state.auth.apiStatus
+    },
+    loginErrors () {
+      return this.$store.state.auth.loginErrorMessages
     }
   },
+  created () {
+    this.clearError()
+  }
 }
 </script>

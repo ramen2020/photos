@@ -1,9 +1,13 @@
-import { OK } from '../util'
+import {
+  OK,
+  UNPROCESSABLE_ENTITY
+} from '../util'
 
 // データの管理
 const state = {
   user: null,
-  apiStatus: null
+  apiStatus: null,
+  loginErrorMessages: null
 }
 
 // stateから算出する値
@@ -19,13 +23,15 @@ const mutations = {
   },
   setApiStatus(state, status) {
     state.apiStatus = status
+  },
+  setLoginErrorMessages(state, messages) {
+    state.loginErrorMessages = messages
   }
 }
 
 //状態を変更するユーザーの操作やapiの呼び出しなど　※非同期
 const actions = {
   async register(context, data) {
-    // 会員登録 API を呼び出し、データを渡して、setUserミューテーションを実行
     const response = await axios.post('/api/register', data)
     context.commit('setUser', response.data)
   },
@@ -41,7 +47,12 @@ const actions = {
     }
 
     context.commit('setApiStatus', false)
-    context.commit('error/setCode', response.status, { root: true })
+
+    if (response.status === UNPROCESSABLE_ENTITY) {
+      context.commit('setLoginErrorMessages', response.data.errors)
+    } else {
+      context.commit('error/setCode', response.status, { root: true })
+    }
   },
   async logout(context) {
     await axios.post('/api/logout')
