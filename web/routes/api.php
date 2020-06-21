@@ -14,11 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
+// 新規登録
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
+// ログイン
 Route::post('/login', 'Auth\LoginController@login')->name('login');
+// ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+// userデータ送る
 Route::get('/user', fn() => Auth::user())->name('user');
+
+// 写真投稿
+Route::post('/photos', 'PhotoController@create')->name('photo.create');
