@@ -39,8 +39,12 @@ class PhotoController extends Controller
     public function create(StorePhoto $request)
     {
         $extension = $request->photo->extension();
+        $folder = dirname(__FILE__, 4) . '/public/img/photo_images/';
         $this->photo['filename'] = $this->photo['id'] . '.' . $extension;
-        $request->photo->storeAs('public/photo_images', $this->photo['filename']);
+
+        // 画像保存（ /public/img/photo_images ）
+        move_uploaded_file($_FILES['photo']['tmp_name'], $folder . $this->photo['filename']);
+
         // データベースエラー時にファイル削除を行うためトランザクション
         DB::beginTransaction();
 
