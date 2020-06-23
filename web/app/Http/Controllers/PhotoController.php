@@ -15,7 +15,7 @@ class PhotoController extends Controller
     public function __construct(Photo $photo)
     {
         $this->photo = $photo;
-        $this->middleware('auth')->except(['index']);;
+        $this->middleware('auth')->except(['index', 'show']);;
     }
 
     /**
@@ -29,6 +29,18 @@ class PhotoController extends Controller
             ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
 
         return response()->json($photos);
+    }
+
+    /**
+     * 写真詳細
+     *
+     * @return void
+     */
+    public function show($id)
+    {
+        $photo = $this->photo->with(['user'])->find($id);
+
+        return response()->json($photo) ?? abort(404);;
     }
 
     /**
