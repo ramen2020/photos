@@ -7,6 +7,12 @@
         :alt="`Photo by ${item.user.name}`"
       >
     </figure>
+    <RouterLink
+      class="photo__overlay"
+      :to="`/photos/${item.id}`"
+      :title="`View the photo by ${item.user.name}`"
+    >
+    </RouterLink>
   </div>
 </template>
 
