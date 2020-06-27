@@ -14,7 +14,7 @@ class Photo extends Model
     {
         parent::__construct($attributes);
 
-        if (! Arr::get($this->attributes, 'id')) {
+        if (!Arr::get($this->attributes, 'id')) {
             $this->setId();
         }
     }
@@ -53,5 +53,14 @@ class Photo extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    /**
+     * リレーションシップ - commentsテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
     }
 }
