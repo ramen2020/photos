@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePhoto;
 use App\Photo;
+use App\Comment;
+use App\Http\Requests\StorePhoto;
+use App\Http\Requests\StoreComment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -11,11 +13,13 @@ use Illuminate\Support\Facades\Storage;
 class PhotoController extends Controller
 {
     protected $photo;
+    protected $comment;
 
-    public function __construct(Photo $photo)
+    public function __construct(Photo $photo, Comment $comment)
     {
-        $this->photo = $photo;
         $this->middleware('auth')->except(['index', 'show']);;
+        $this->photo = $photo;
+        $this->comment = $comment;
     }
 
     /**
@@ -72,5 +76,16 @@ class PhotoController extends Controller
 
         // 新規作成のステータスコード201を返す
         return response($this->photo, 201);
+    }
+
+    public function addComment(Photo $photo, StoreComment $request)
+    {
+        $this->content = $request->get('content');
+        $this->comment['user_id'] = Auth::user()->id;
+        $photo->comments()->save($this->comment);
+
+        $new_comment = $this->comment::where('id', $this->comment['id'])->with('author')->first();
+
+        return response($new_comment, 201);
     }
 }
