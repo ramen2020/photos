@@ -50,6 +50,11 @@ export default {
       this.lastPage = response.data.last_page
     }
   },
+  computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
+    }
+  },
   watch: {
     $route: {
       async handler () {

@@ -31,8 +31,11 @@
           </p>
         </li>
       </ul>
-      <p v-else>Let's comment on this photo.</p>
-      <form @submit.prevent="addComment" class="form">
+      <div v-else>
+        <p v-if="isLogin">Let's comment on this photo.</p>
+        <p v-else>Let's Log in and comment on this picture!</p>
+      </div>
+      <form v-if="isLogin" @submit.prevent="addComment" class="form">
         <textarea class="form__item" v-model="commentContent"></textarea>
         <div class="form__button">
           <button type="submit" class="button button--inverse">submit comment</button>
@@ -87,6 +90,11 @@ export default {
   filters: {
     moment: function (date) {
         return moment(date).format('YYYY/MM/DD');
+    }
+  },
+  computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
     }
   },
   watch: {
