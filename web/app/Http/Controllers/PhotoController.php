@@ -30,7 +30,7 @@ class PhotoController extends Controller
     public function index()
     {
         $photos = $this->photo->with(['user'])
-            ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
+            ->orderBy(Photo::CREATED_AT, 'desc')->paginate(4);
 
         return response()->json($photos);
     }
