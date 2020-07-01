@@ -56,6 +56,7 @@ class PhotoController extends Controller
     {
         $extension = $request->photo->extension();
         $folder = dirname(__FILE__, 4) . '/public/img/photo_images/';
+        $file = $this->photo['id'];
         $this->photo['filename'] = $this->photo['id'] . '.' . $extension;
 
         // 画像保存（ /public/img/photo_images ）
@@ -74,7 +75,8 @@ class PhotoController extends Controller
             throw $exception;
         }
 
-        // 新規作成のステータスコード201を返す
+        $this->photo['id'] = $file;
+
         return response($this->photo, 201);
     }
 
