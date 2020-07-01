@@ -69,7 +69,6 @@ export default {
       }
 
       this.photo = response.data
-      console.log(this.photo)
     },
     async addComment () {
       const response = await axios.post(`/api/photos/${this.id}/comments`, {

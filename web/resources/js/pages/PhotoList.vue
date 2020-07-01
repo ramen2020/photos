@@ -44,7 +44,6 @@ export default {
         this.$store.commit('error/setCode', response.status)
         return false
       }
-      console.log(response)
 
       this.photos = response.data.data
       this.currentPage = response.data.current_page

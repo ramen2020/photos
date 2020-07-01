@@ -18,7 +18,6 @@ const routes = [
     component: PhotoList,
     props: route => {
       const page = route.query.page
-      console.log(page)
       return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
     }
   },
