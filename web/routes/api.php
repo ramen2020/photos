@@ -30,4 +30,6 @@ Route::group(['prefix' => '/photos'], function () {
   Route::get('/', 'PhotoController@index')->name('photo.index');
   // 写真詳細
   Route::get('/{id}', 'PhotoController@show')->name('photo.show');
+  // コメント機能
+  Route::post('/{photo}/comments', 'PhotoController@addComment')->name('photo.comment');
 });

@@ -8,7 +8,7 @@ class Comment extends Model
 {
 
     protected $visible = [
-        'author', 'content',
+        'author', 'content', 'created_at'
     ];
 
     /**

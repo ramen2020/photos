@@ -17,12 +17,33 @@
       <h2 class="photo-detail__title">
         <i class="icon ion-md-chatboxes"></i>Comments
       </h2>
+      <ul class="photo-detail__comments">
+        <li
+          v-for="comment in photo.comments"
+          :key="comment.content"
+          class="photo-detail__commentItem"
+        >
+          <p class="photo-detail__commentInfo">
+            {{ comment.author.name }} - {{ comment.created_at | moment }}
+          </p>
+          <p class="photo-detail__commentBody">
+            {{ comment.content }}
+          </p>
+        </li>
+      </ul>
+      <form @submit.prevent="addComment" class="form">
+        <textarea class="form__item" v-model="commentContent"></textarea>
+        <div class="form__button">
+          <button type="submit" class="button button--inverse">submit comment</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script>
 import { OK } from '../util'
+import moment from 'moment';
 
 export default {
   props: {
@@ -34,7 +55,8 @@ export default {
   data () {
     return {
       photo: null,
-      fullWidth: false
+      fullWidth: false,
+      commentContent: ''
     }
   },
   methods: {
@@ -47,6 +69,24 @@ export default {
       }
 
       this.photo = response.data
+      console.log(this.photo)
+    },
+    async addComment () {
+      const response = await axios.post(`/api/photos/${this.id}/comments`, {
+        content: this.commentContent
+      })
+
+      this.commentContent = ''
+
+      this.photo.comments = [
+        response.data,
+        ...this.photo.comments
+      ]
+    }
+  },
+  filters: {
+    moment: function (date) {
+        return moment(date).format('YYYY/MM/DD');
     }
   },
   watch: {

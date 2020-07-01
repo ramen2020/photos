@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Photo;
 use App\Comment;
-use App\Http\Requests\StorePhoto;
 use App\Http\Requests\StoreComment;
+use App\Http\Requests\StorePhoto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
@@ -17,7 +16,7 @@ class PhotoController extends Controller
 
     public function __construct(Photo $photo, Comment $comment)
     {
-        $this->middleware('auth')->except(['index', 'show']);;
+        $this->middleware('auth')->except(['index', 'show']);
         $this->photo = $photo;
         $this->comment = $comment;
     }
@@ -42,9 +41,9 @@ class PhotoController extends Controller
      */
     public function show($id)
     {
-        $photo = $this->photo->with(['user'])->find($id);
+        $photo = $this->photo->with(['user', 'comments.author'])->find($id);
 
-        return response()->json($photo) ?? abort(404);;
+        return response()->json($photo) ?? abort(404);
     }
 
     /**
@@ -82,10 +81,10 @@ class PhotoController extends Controller
 
     public function addComment(Photo $photo, StoreComment $request)
     {
-        $this->content = $request->get('content');
+
+        $this->comment['content'] = $request['content'];
         $this->comment['user_id'] = Auth::user()->id;
         $photo->comments()->save($this->comment);
-
         $new_comment = $this->comment::where('id', $this->comment['id'])->with('author')->first();
 
         return response($new_comment, 201);
