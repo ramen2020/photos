@@ -17,7 +17,7 @@
       <h2 class="photo-detail__title">
         <i class="icon ion-md-chatboxes"></i>Comments
       </h2>
-      <ul class="photo-detail__comments">
+      <ul v-if="photo.comments.length > 0" class="photo-detail__comments">
         <li
           v-for="comment in photo.comments"
           :key="comment.content"
@@ -31,6 +31,7 @@
           </p>
         </li>
       </ul>
+      <p v-else>Let's comment on this photo.</p>
       <form @submit.prevent="addComment" class="form">
         <textarea class="form__item" v-model="commentContent"></textarea>
         <div class="form__button">
