@@ -28,6 +28,7 @@
         "vuex": "^3.4.0"
     },
     "dependencies": {
-        "moment": "^2.27.0"
+        "moment": "^2.27.0",
+        "vuetify": "^2.3.3"
     }
 }
