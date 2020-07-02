@@ -32,4 +32,8 @@ Route::group(['prefix' => '/photos'], function () {
   Route::get('/{id}', 'PhotoController@show')->name('photo.show');
   // コメント機能
   Route::post('/{photo}/comments', 'PhotoController@addComment')->name('photo.comment');
+  // いいね機能
+  Route::put('/{id}/like', 'LikeController@like')->name('photo.like');
+  // いいね解除
+  Route::delete('/{id}/like', 'LikeController@unlike');
 });

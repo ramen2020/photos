@@ -28,7 +28,7 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        $photos = $this->photo->with(['user'])
+        $photos = $this->photo->with(['user','likes'])
             ->orderBy(Photo::CREATED_AT, 'desc')->paginate(4);
 
         return response()->json($photos);
@@ -41,7 +41,7 @@ class PhotoController extends Controller
      */
     public function show($id)
     {
-        $photo = $this->photo->with(['user', 'comments.author'])->find($id);
+        $photo = $this->photo->with(['user', 'comments.author', 'likes'])->find($id);
 
         return response()->json($photo) ?? abort(404);
     }
