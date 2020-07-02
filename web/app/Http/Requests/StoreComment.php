@@ -27,4 +27,11 @@ class StoreComment extends FormRequest
             'content' => 'required|max:500',
         ];
     }
+
+    public function attributes()
+    {
+        return [
+            'content' => 'コメント',
+        ];
+    }
 }
